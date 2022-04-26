@@ -1,0 +1,17 @@
+Name: Anna
+Surname: Bilova
+Year of birth: 2002
+Average mark: 2,3
+Technical studies student.
+
+Name: Josef
+Surname: Novak
+Year of birth: 2001
+Average mark: 1,2
+Humanities studies student.
+
+Name: Marek
+Surname: Koc
+Year of birth: 2000
+Average mark: 3,2
+Combine studies student.
