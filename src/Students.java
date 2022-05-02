@@ -22,7 +22,9 @@ public class Students{
 		this.yearOfBirth=yearOfBirth;
 		this.marks=new ArrayList<Float>();
 	}
-	
+	public List<Float> getMarks(){
+		return marks;
+	}
 	public float getMark() {
 		return mark;
 	}
@@ -32,6 +34,7 @@ public class Students{
 		}
 		else {
 			marks.add(mark);
+			System.out.println("Mark was set.");
 		}
 	}
 	public float getAverageMark() {

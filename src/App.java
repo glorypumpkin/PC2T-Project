@@ -1,7 +1,9 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -97,6 +99,8 @@ public class App {
 			System.out.println("5 - Students skill,\n6 - Sort students by surname,\n7 - Print average mark in technical and humanities studies,");
 			System.out.println("8 - Print the total number of students in individual groups,");
 			System.out.println("9 - Save data to textfile,\n10 - Load data from textfile,");
+			System.out.println("11 - Connect to SQL database,\n12 - Sava data to the SQL database,");
+			System.out.println("13 - Load data from SQl database,\n14 - Close the program.");
 			String choice = num.nextLine();
 			
 			switch(choice) {
@@ -169,7 +173,6 @@ public class App {
 					for(Students student : students) {
 						if(student.getId()==id) {
 							student.setMark(mark);
-							System.out.println("Mark was set.");
 							break;
 						}
 					}
@@ -295,7 +298,7 @@ public class App {
 						bw.append(printStuds(studs));
 					}
 					bw.close();
-					System.out.println("Success");
+					System.out.println("Success :)");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -303,24 +306,55 @@ public class App {
 				break;
 			case "10":
 				String filename1="readdata.txt";
+				FileReader fr=null;
+				BufferedReader in=null;
 				try {
-					Scanner scan = new Scanner(new FileReader(filename1));
-					while(scan.hasNextLine()){
-//						String name = scan.nextLine();
-//						String surname = scan.nextLine();
-//						int year = scan.nextInt();
-//						float aveMark = scan.nextFloat();
-//						Students stud = new Students(name,surname,year,aveMark);
-						System.out.println(scan.nextLine());
+					fr = new FileReader(filename1);
+					in = new BufferedReader(fr);
+					String line;
+					String separator = ";";
+					while((line=in.readLine())!=null){
+						String[] values = line.split(separator);
+						values=line.split(separator);
+						if (values.length!=4) {
+							System.out.println("Invalid file, try again!");
 						}
+						else if(values.length==4) {
+							Students stud = new Students(values[0],values[1],Integer.parseInt(values[2]));
+							stud.setMark(Float.parseFloat(values[3]));
+							students.add(stud);
+							System.out.println("Success :)");
+						}
+						if (in!=null)
+							{
+								in.close();
+								fr.close();
+							}
+					}
 				}
-				catch(IOException e){
-					System.out.println(e);
-				}
+				catch (IOException e) {
+					System.out.println("Cannot open this file!");
+				}  
+				break;
+			case "11":
+				SQLcon.conStud();
 				break;
 			case "12":
+				SQLcon.createTable();
+				for(Students stud : students) {
+					SQLcon.SaveStudent(stud.getId(), stud.getName(), stud.getSurname(), stud.getYear(), stud.getMarks(), stud.getAverageMark());
+				}
+				break;
+			case "13":
+				SQLcon.PrintStudents();	
+				break;
+			case "14":
+				System.out.println("Thank you for using this program :)");
 				runApp=false;
 				break;
+			default: {
+                System.out.println("Command not found. Please use digits from 1 to 14.");
+            }
 		}
 	}
 
